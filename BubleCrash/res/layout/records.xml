@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:orientation="horizontal" >
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:orientation="vertical" >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:gravity="center"
+            android:text="ランキング"
+            android:textColor="#EA31FF"
+            android:textSize="34sp"
+            android:textStyle="bold|"
+            android:typeface="serif" />
+
+        <TextView
+            android:id="@+id/score_now"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="30dp"
+            android:layout_weight="1"
+            android:background="#000"
+            android:gravity="center"
+            android:text="Score　1000"
+            android:textColor="#FFF"
+            android:textSize="24sp"
+            android:textStyle="italic"
+            android:typeface="serif" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="#000"
+                    android:gravity="center"
+                    android:text="No1"
+                    android:textColor="#FFF"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="#000"
+                    android:gravity="center"
+                    android:text="No2"
+                    android:textColor="#FFF"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="#000"
+                    android:gravity="center"
+                    android:text="No3"
+                    android:textColor="#FFF"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="#000"
+                    android:gravity="center"
+                    android:text="No4"
+                    android:textColor="#FFF"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="#000"
+                    android:gravity="center"
+                    android:text="No5"
+                    android:textColor="#FFF"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/score1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:background="#000"
+                    android:gravity="center"
+                    android:text="10000"
+                    android:textColor="#FFF"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/score2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="#000"
+                    android:gravity="center"
+                    android:text="7000"
+                    android:textColor="#FFF"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/score3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="#000"
+                    android:gravity="center"
+                    android:text="1000"
+                    android:textColor="#FFF"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/score4"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="#000"
+                    android:gravity="center"
+                    android:text="700"
+                    android:textColor="#FFF"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+
+                <TextView
+                    android:id="@+id/score5"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="#000"
+                    android:gravity="center"
+                    android:text="70"
+                    android:textColor="#FFF"
+                    android:textSize="24sp"
+                    android:textStyle="italic"
+                    android:typeface="serif" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/title_btn"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_design"
+            android:text="タイトル"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:typeface="serif" />
+
+        <Button
+            android:id="@+id/replay_btn"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_design"
+            android:text="プレイ"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:typeface="serif" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
