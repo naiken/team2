@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ボタンが押されてない時 -->
+    <item android:state_pressed="false">
+        
+            
+        <!-- ボタンの形状 -->
+        <shape android:shape="rectangle" >
+            
+            <!-- ボタンの色 -->
+            <gradient 
+                android:angle="270" 
+                android:centerColor="#ff1493" 
+                android:endColor="#ff69b4" 
+                android:startColor="#ff69b4" />
+
+            <!-- ボタンの角の半径 -->
+            <corners android:radius="46dp" />
+            <!-- ボタン内の余白 -->
+            <padding
+                android:bottom="8dp"
+                android:left="16dp"
+                android:right="16dp"
+                android:top="8dp" />
+        </shape>
+    </item>
+    
+    
+    <!-- ボタンが押された時 -->
+    <item android:state_pressed="true">
+
+        <!-- ボタンの形状 -->
+        <shape android:shape="rectangle" >
+            
+            <!-- ボタンの色 -->
+            <solid android:color="#c71585"/>
+
+            <!-- ボタンの角の半径 -->
+            <corners android:radius="46dp" />
+            <!-- ボタン内の余白 -->
+            <padding
+                android:bottom="8dp"
+                android:left="16dp"
+                android:right="16dp"
+                android:top="8dp" />
+        </shape>
+    </item>
+
+</selector>

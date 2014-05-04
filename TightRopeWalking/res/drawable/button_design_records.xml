@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- ボタンが押されてない時 -->
+    <item><shape android:shape="rectangle">
+            <gradient android:angle="270" android:centerColor="#ff1493" android:endColor="#ff69b4" android:startColor="#ff69b4" />
+
+            <corners android:radius="46dp" />
+        </shape></item>
+    
+
+</selector>
