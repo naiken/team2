@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <ViewFlipper
+        android:id="@+id/flipper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <LinearLayout
+            android:id="@+id/layout_first"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/how_to_flick2"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <!--
+            <ImageView
+                android:id="@+id/imageview_first"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="5" >
+            </ImageView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="25" />
+            -->
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_second"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/how_to_traning6"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="25" />
+
+            <ImageButton
+                android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/how_to_button" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_third"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/how_to_traning5"
+            android:gravity="center"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_forth"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/how_to_traning4"
+            android:gravity="center"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_fifth"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/how_to_traning2"
+            android:gravity="center"
+            android:orientation="vertical" >
+        </LinearLayout>
+    </ViewFlipper>
+
+</LinearLayout>
