@@ -49,9 +49,6 @@ public class TraningScreen extends Activity implements View.OnTouchListener {
         findViewById(R.id.layout_first).setOnTouchListener(this);
         findViewById(R.id.layout_second).setOnTouchListener(this);
         findViewById(R.id.layout_third).setOnTouchListener(this);
-        findViewById(R.id.layout_forth).setOnTouchListener(this);
-        findViewById(R.id.layout_fifth).setOnTouchListener(this);
-
     }
 
     @Override
@@ -61,8 +58,7 @@ public class TraningScreen extends Activity implements View.OnTouchListener {
         case R.id.layout_first:
         case R.id.layout_second:
         case R.id.layout_third:
-        case R.id.layout_forth:
-        case R.id.layout_fifth:
+
             switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 firstTouch = event.getRawX();

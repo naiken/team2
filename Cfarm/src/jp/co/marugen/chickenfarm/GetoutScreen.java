@@ -25,14 +25,12 @@ public class GetoutScreen extends Activity implements View.OnTouchListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // フルスクリーン、タイトルバーの非表示
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         setContentView(R.layout.getout_screen);
 
-        // 遊び方に画面遷移
         ImageButton btn = (ImageButton) findViewById(R.id.button1);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +48,7 @@ public class GetoutScreen extends Activity implements View.OnTouchListener {
         findViewById(R.id.layout_second).setOnTouchListener(this);
         findViewById(R.id.layout_third).setOnTouchListener(this);
         findViewById(R.id.layout_forth).setOnTouchListener(this);
+        findViewById(R.id.layout_fifth).setOnTouchListener(this);
 
     }
 
@@ -61,6 +60,7 @@ public class GetoutScreen extends Activity implements View.OnTouchListener {
         case R.id.layout_second:
         case R.id.layout_third:
         case R.id.layout_forth:
+        case R.id.layout_fifth:
 
             switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:

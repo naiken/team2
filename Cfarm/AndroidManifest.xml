@@ -1,12 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jp.co.marugen.chickenfarm"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="1.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
-
+    
+	<!-- AppC Core Setting Start -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- AppC Core Setting End -->
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -89,6 +93,86 @@
             android:screenOrientation="portrait" >
         </activity>
         
+        <activity
+            android:name="jp.co.marugen.chickenfarm.ghostcrash.GhostCrash"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+        <activity
+            android:name="jp.co.marugen.chickenfarm.ghostcrash.GResult"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        
+        <activity
+            android:name="jp.co.marugen.chickenfarm.garbagepick.GarbagePick"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+        </activity>
+        
+        <activity
+            android:name="jp.co.marugen.chickenfarm.garbagepick.GarbageResult"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+        </activity>
+        
+        
+        
+        
+        
+        
+        
+                <!-- AppC Core Setting Start -->
+        <meta-data
+            android:name="appc_media_key"
+            android:value="f990bbd82bb5c67a89fb30a018f8d5c0f79f1f65" />
+    
+        <activity
+            android:name="net.app_c.cloud.sdk.AppCAdActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|uiMode|touchscreen"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="net.app_c.cloud.sdk.AppCRecoveryActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|uiMode|touchscreen"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="net.app_c.cloud.sdk.AppCAgreementActivity"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|uiMode|touchscreen"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <!-- AppC Core Setting End -->
+ 
+ 
+
+
+        <!-- AppC Core Setting Start -->
+        <!-- warningが出ますが android:exportedの記述はしないでください -->
+        <receiver android:name="net.app_c.cloud.sdk.AppCIDReceiver" >
+            <intent-filter>
+                <action android:name="jp.co.cayto.appc.sdk.android.remote.command.gid.search" />
+                <action android:name="jp.co.cayto.appc.sdk.android.remote.command.gid.set" />
+                <action android:name="jp.co.cayto.appc.sdk.android.remote.command.gid.remove" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="net.app_c.cloud.sdk.AppCPkgReceiver"
+            android:enabled="true"
+            android:exported="false"
+            android:label="BootStrap" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+            
+                <data android:scheme="package" >
+                </data>
+            </intent-filter>
+        </receiver>
+        <!-- AppC Core Setting End -->
     </application>
 
 </manifest>

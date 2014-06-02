@@ -42,13 +42,15 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="25" />
+                android:layout_height="0dp"
+                android:layout_weight="10" />
 
             <ImageButton
                 android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
                 android:background="@null"
                 android:src="@drawable/how_to_button" />
         </LinearLayout>
@@ -61,7 +63,7 @@
             android:gravity="center"
             android:orientation="vertical" >
         </LinearLayout>
-        
+
         <LinearLayout
             android:id="@+id/layout_forth"
             android:layout_width="match_parent"
@@ -70,7 +72,6 @@
             android:gravity="center"
             android:orientation="vertical" >
         </LinearLayout>
-        
     </ViewFlipper>
 
 </LinearLayout>

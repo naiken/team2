@@ -24,6 +24,8 @@ public class DataManager {
 	private static final String KEY_SAMON = "SAMON";
 	private static final String KEY_IKURA = "IKURA";
 	private static final String KEY_CHIKEN = "CHIKEN";
+	private static final String KEY_FRONT_CHIKEN_IMG = "FRONT_CHIKEN";
+	private static final String KEY_SIDE_CHIKEN_IMG = "SIDE_CHIKEN";
 	
 	private DataManager(Context context) {
 		_pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE);
@@ -57,7 +59,7 @@ public class DataManager {
 	 * @return
 	 */
 	public int loadCP() {
-		return this._pref.getInt(KEY_CP, 1000);
+		return this._pref.getInt(KEY_CP, 3000);
 	}
 	
 	/**
@@ -312,6 +314,42 @@ public class DataManager {
 	public int loadCHIKEN() {
 		return this._pref.getInt(KEY_CHIKEN, 0);
 	}
+	
+	/**
+     * 正面のチキンの画像の保存
+     * @param data
+     */
+    public void saveFRONTCHIKEN (int data) {
+        Editor e = this._pref.edit();
+        e.putInt(KEY_FRONT_CHIKEN_IMG, data);
+        e.commit();
+    }
+    
+    /**
+     * 正面のチキンの画像データロード
+     * @return
+     */
+    public int loadFRONTCHIKEN() {
+        return this._pref.getInt(KEY_FRONT_CHIKEN_IMG, 0);
+    }
+    
+    /**
+     * 横のチキンの画像の保存
+     * @param data
+     */
+    public void saveSIDECHIKEN (int data) {
+        Editor e = this._pref.edit();
+        e.putInt(KEY_SIDE_CHIKEN_IMG, data);
+        e.commit();
+    }
+    
+    /**
+     * 横のチキンの画像データロード
+     * @return
+     */
+    public int loadSIDECHIKEN() {
+        return this._pref.getInt(KEY_SIDE_CHIKEN_IMG, 0);
+    }
 	
 }
 

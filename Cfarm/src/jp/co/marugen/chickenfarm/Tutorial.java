@@ -15,14 +15,12 @@ public class Tutorial extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // フルスクリーン、タイトルバーの非表示
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         setContentView(R.layout.tutorial);
 
-        // たまごを買おうへの画面遷移
         ImageButton btn = (ImageButton) findViewById(R.id.button1);
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -33,7 +31,6 @@ public class Tutorial extends Activity {
             }
         });
 
-        // エサをあげようへの画面遷移
         ImageButton btn2 = (ImageButton) findViewById(R.id.button2);
 
         btn2.setOnClickListener(new View.OnClickListener() {
@@ -44,7 +41,6 @@ public class Tutorial extends Activity {
             }
         });
 
-        // トレーニングさせようへの画面遷移
         ImageButton btn3 = (ImageButton) findViewById(R.id.button3);
 
         btn3.setOnClickListener(new View.OnClickListener() {
@@ -55,7 +51,6 @@ public class Tutorial extends Activity {
             }
         });
 
-        // 出荷させようへの画面遷移
         ImageButton btn4 = (ImageButton) findViewById(R.id.button4);
 
         btn4.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +61,6 @@ public class Tutorial extends Activity {
             }
         });
 
-        // 図鑑をコンプリートさせようへの画面遷移
         ImageButton btn5 = (ImageButton) findViewById(R.id.button5);
 
         btn5.setOnClickListener(new View.OnClickListener() {
@@ -77,13 +71,12 @@ public class Tutorial extends Activity {
             }
         });
 
-        // メイン画面へ画面遷移
         ImageButton btn6 = (ImageButton) findViewById(R.id.button6);
 
         btn6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Tutorial.this, GuideScreen.class);
+                Intent intent = new Intent(Tutorial.this, ChikenActivity.class);
                 startActivity(intent);
             }
         });

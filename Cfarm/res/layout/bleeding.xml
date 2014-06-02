@@ -1,165 +1,195 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@drawable/bleedingbg"
     android:orientation="vertical" >
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="15"
-        android:orientation="vertical" >
+        android:layout_height="0dp"
+        android:layout_weight="6.5"
+        android:orientation="horizontal" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <View
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="-5dp"
-            android:layout_marginTop="5dp"
-            android:layout_weight="1"
-            android:orientation="horizontal" >
+            android:layout_weight="1" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-            
-            <ImageView
-		         android:id="@+id/satietybar"
-		         android:layout_width="match_parent"
-		         android:layout_height="match_parent"
-		         android:layout_weight="1"
-		         android:src="@drawable/satietybar0" />
-            
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-            
-            <TextView
-                android:id="@+id/guts"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_marginBottom="-2dp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-            
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/guts"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="right|top"
-            android:layout_marginTop="-3dp"
-            android:layout_marginBottom="3dp"
-            android:orientation="horizontal" >
+            android:gravity="center_horizontal"
+            android:text="10000"
+            android:textSize = "20sp"
+            android:textColor="#fff" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="3" />
-
-            <ImageView
-                android:id="@+id/chiken_rank"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_weight="2"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <View
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="top"
-            android:layout_marginTop="-2.5dp"
-            android:layout_marginBottom="2.5dp"
-            android:orientation="horizontal" >
+            android:layout_weight="0.3" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="3" />
-
-            <TextView
-                android:id="@+id/having_cp"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:gravity="center|top"
-                android:text="Medium Text"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/having_cp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.8"
+            android:gravity="center_horizontal"
+            android:textSize = "20sp"
+            android:text="10000"
+            android:textColor="#fff" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="6"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="-5dp" >
+        android:layout_height="0dp"
+        android:layout_weight="6.5"
+        android:orientation="horizontal" >
+ 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
 
         <ImageView
-            android:id="@+id/chiken"
-            android:layout_width="220dp"
-            android:layout_height="220dp"
-            android:src="@drawable/none" />
-        
-        <ImageView
-            android:id="@+id/buit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:id="@+id/satietybar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center_horizontal"
+            android:src="@drawable/satietybar0" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="16"
-        android:gravity="center_horizontal"
+        android:layout_height="0dp"
+        android:layout_weight="6.5"
+        android:orientation="horizontal" >
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/chiken_rank"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6.5" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="100"
+        android:orientation="horizontal" >   
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <ImageView
+                android:id="@+id/chiken"
+                android:layout_width="210dp"
+                android:layout_height="210dp"
+                android:layout_gravity="center" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4" />
+
+                <ImageView
+                    android:id="@+id/buit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"/>
+                
+            </LinearLayout>
+        </FrameLayout>
+
+      
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
         android:orientation="horizontal" >
 
         <ImageButton
             android:id="@+id/tab_bait"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
+            android:scaleType="fitCenter"
             android:src="@drawable/tabbait" />
 
         <ImageButton
             android:id="@+id/tab_training"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
+            android:scaleType="fitCenter"
             android:src="@drawable/tabtraining" />
 
         <ImageButton
             android:id="@+id/tab_shop"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
+            android:scaleType="fitCenter"
             android:src="@drawable/tabshop" />
 
         <ImageButton
             android:id="@+id/tab_book"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
+            android:scaleType="fitCenter"
             android:src="@drawable/tabbook" />
-        
+
         <ImageButton
             android:id="@+id/tab_back"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
+            android:scaleType="fitCenter"
             android:src="@drawable/tabback" />
     </LinearLayout>
 

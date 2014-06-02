@@ -9,6 +9,9 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import jp.co.marugen.chickenfarm.garbagepick.GarbagePick;
+import jp.co.marugen.chickenfarm.ghostcrash.GhostCrash;
+import jp.co.marugen.chickenfarm.ghostcrash.MyGgm;
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -35,13 +38,21 @@ import android.widget.Toast;
 
 public class Bleeding extends Activity implements OnClickListener {
 
+    private int firstEvo = 150;
+    private int secondEvo = 400;
+    private int hungryTime = 100;//最初にゲージが減る時間 100だった
+    private int birthTime = 3; //生まれる時間 3だった
+    
+    private int firstChange = 1500;
+    private int secontChange = 3000;
+
     private int nowTime = 0;
     private int guts;
     private int BleedingPoint;
-
-    // private int animNum;
     private static boolean isHugry;
     private boolean canTraning;
+    // private boolean nowEating;
+    private int eating = 0;
     private TextView cpText;
     private TextView gutsText;
     private ImageView chikenImgV;
@@ -49,8 +60,15 @@ public class Bleeding extends Activity implements OnClickListener {
     private ImageView chikenRankImgV;
     private ImageView feedImgV;
 
-    // 鳥の画像配列
-    private int[] birdResorce = {
+    private MyGgm myBgm;
+
+    private int nowBirdFrontRescorce;
+    private int nowBirdSideRescorce;
+    // private int[] nowBirdImageResorce = new int[2];// 現在表示されている鳥の画像リソース
+    ArrayList<Integer> array = new ArrayList<Integer>();
+
+    // 鳥正面の画像配列　要変更
+    private int[] birdFrontResorce = {
 
             // egg1
             R.drawable.niwatori,
@@ -75,9 +93,101 @@ public class Bleeding extends Activity implements OnClickListener {
             R.drawable.pengin_front,
 
             // egg4
-            R.drawable.datyou_front, R.drawable.iwatobi_paengin_front,
+            R.drawable.datyou_front, R.drawable.iwatobi_pengin_front,
             R.drawable.hikuidori_front, R.drawable.toki_front,
             R.drawable.karaage_kun_front, R.drawable.twitter_front };
+
+    // 鳥横の画像配列　
+    private int[] birdSideResorce = {
+
+            // egg1
+            R.drawable.niwatori_side,
+            R.drawable.hato_side,
+            R.drawable.suzume_side,
+            R.drawable.inko_side,
+            R.drawable.kamome_side,
+            R.drawable.mejiro_side,
+
+            // egg2
+            R.drawable.taka_side,
+            R.drawable.kyukantyo_side,
+            R.drawable.ukokkei_side,
+            R.drawable.oumu_side,
+            R.drawable.turu_side2,
+            R.drawable.fukurou_side,
+
+            // egg3
+            R.drawable.perikan_side, R.drawable.kiji_side,
+            R.drawable.onioohashi_side, R.drawable.hagewasi_side,
+            R.drawable.furamingo_side,
+            R.drawable.pengin_side,
+
+            // egg4
+            R.drawable.datyou_side, R.drawable.iwatobi_pengin_side,
+            R.drawable.hikuidori_side, R.drawable.toki_side,
+            R.drawable.karaage_kun_side, R.drawable.twitter_side };
+
+    // エサを食べる画像の配列
+    private int[] birdBaitResorce = {
+
+            // egg1
+            R.drawable.niwatori_bait,
+            R.drawable.hato_bait,
+            R.drawable.suzume_bait,
+            R.drawable.inko_bait,
+            R.drawable.kamome_bait,
+            R.drawable.mejiro_bait,
+
+            // egg2
+            R.drawable.taka_bait,
+            R.drawable.kyukantyo_bait,
+            R.drawable.ukokkei_bait,
+            R.drawable.oumu_bait,
+            R.drawable.turu_bait,
+            R.drawable.fukurou_bait,
+
+            // egg3
+            R.drawable.perikan_bait, R.drawable.kiji_bait,
+            R.drawable.onioohashi_bait, R.drawable.hagewasi_bait,
+            R.drawable.furamingo_bait,
+            R.drawable.pengin_bait,
+
+            // egg4
+            R.drawable.datyou_bait, R.drawable.iwatobi_pengin_bait,
+            R.drawable.hikuidori_bait, R.drawable.toki_bait,
+            R.drawable.karaage_kun_bait, R.drawable.twitter_bait
+
+    };
+
+    // 王冠の画像の配列
+    private int[] maxBirdResorce = {
+
+            // egg1
+            R.drawable.niwatori_king,
+            R.drawable.hato_front_king,
+            R.drawable.suzume_front_king,
+            R.drawable.inko_front_king,
+            R.drawable.kamome_front_king,
+            R.drawable.mejiro_front_king,
+
+            // egg2
+            R.drawable.taka_front_king,
+            R.drawable.kyukantyo_front_king,
+            R.drawable.ukokkei_front_king,
+            R.drawable.oumu_front_king,
+            R.drawable.turu_front_king,
+            R.drawable.fukurou_front_king,
+
+            // egg3
+            R.drawable.perikan_front_king, R.drawable.kiji_front_king,
+            R.drawable.onioohashi_front_king, R.drawable.hagewasi_front_king,
+            R.drawable.furamingo_front_king,
+            R.drawable.pengin_front_king,
+
+            // egg4
+            R.drawable.datyou_front_king, R.drawable.iwatobi_pengin_front_king,
+            R.drawable.hikuidori_front_king, R.drawable.toki_front_king,
+            R.drawable.karaage_kun_king, R.drawable.twitter_front_king };
 
     // 現在時刻
     private int currentTime;
@@ -87,7 +197,8 @@ public class Bleeding extends Activity implements OnClickListener {
 
     // タイマー
     private Timer timer;
-    public final static int TIMER_PERIOD = 5000; // タイマーの周期
+    private Timer timer2;
+    public final static int TIMER_PERIOD = 8000; // タイマーの周期
     private Handler handler = new Handler(); // タイマーのハンドラを生成
 
     // データベース
@@ -128,14 +239,26 @@ public class Bleeding extends Activity implements OnClickListener {
         ImageButton tab_back = (ImageButton) findViewById(R.id.tab_back);
         tab_back.setOnClickListener(this);
 
+        myBgm = new MyGgm(this);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
+        myBgm.start(0);
+
         // CPの表示
         cpText.setText(String.valueOf(DataManager.getInstance(this).loadCP()));
+
+        // チキンがいたら、チキンの画像を取得
+        if (DataManager.getInstance(this).loadEGG() != 0) {
+            nowBirdFrontRescorce = DataManager.getInstance(this)
+                    .loadFRONTCHIKEN();
+            nowBirdSideRescorce = DataManager.getInstance(this)
+                    .loadSIDECHIKEN();
+        }
 
         // ガッツの表示
         guts = DataManager.getInstance(this).loadTOTALGUTS();
@@ -162,9 +285,6 @@ public class Bleeding extends Activity implements OnClickListener {
 
         }
 
-        // アニメーション
-        rndAnimation();
-
         /**
          * 前回エサをあげた時間と今回育成画面に入った時間の差の取得 データが無い場合、チキンがいない場合は差を0で計算
          */
@@ -174,9 +294,6 @@ public class Bleeding extends Activity implements OnClickListener {
             nowTime = newTime();
             DataManager.getInstance(Bleeding.this).saveTIME(nowTime);
         }
-
-        // 前回食事を与えた時間を取得
-        preTime = DataManager.getInstance(this).loadTIME();
 
         // タイマーを生成
         timer = new Timer(false);
@@ -201,22 +318,71 @@ public class Bleeding extends Activity implements OnClickListener {
                         if (DataManager.getInstance(Bleeding.this).loadTIME() == -1
                                 || DataManager.getInstance(Bleeding.this)
                                         .loadEGG() == 0) {
+
                             // チキンいなければなにもしない
+                        } else if (DataManager.getInstance(Bleeding.this)
+                                .loadBLEEDING_POINT() >= secondEvo) {
+                            // チキンが最大まで成長していれば時間が経過しないようにする
+                            changeSatietyBar(0);
+                            growthJudge(0);
                         } else {
                             currentTime = newTime();
+
+                            // 前回食事を与えた時間を取得
+                            preTime = DataManager.getInstance(Bleeding.this)
+                                    .loadTIME();
                             changeSatietyBar(currentTime - preTime);// 満腹度ゲージの変更
                             growthJudge(currentTime - preTime);// 成長の判定
                         }
                     }
                 });
             }
-        }, 1000, TIMER_PERIOD); // 初回起動の遅延(1sec)と周期(5sec)指定
+        }, 10, TIMER_PERIOD); // 初回起動の遅延(1sec)と周期(5sec)指定
+
+        // タイマーを生成
+        timer2 = new Timer(false);
+        timer2.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(new Runnable() {
+
+                    // ここに定期実行したい処理を書く
+                    @Override
+                    public void run() {
+
+                        // アニメーション
+                        if (eating == 1) {
+                            chikenEatAnimation(R.drawable.ika);
+                            fadingAnimation(R.drawable.ika);
+                        } else if (eating == 2) {
+                            chikenEatAnimation(R.drawable.ebi);
+                            fadingAnimation(R.drawable.ebi);
+                        } else if (eating == 3) {
+                            chikenEatAnimation(R.drawable.maguro);
+                            fadingAnimation(R.drawable.maguro);
+                        } else if (eating == 4) {
+                            chikenEatAnimation(R.drawable.samon);
+                            fadingAnimation(R.drawable.samon);
+                        } else if (eating == 5) {
+                            chikenEatAnimation(R.drawable.ikura);
+                            fadingAnimation(R.drawable.ikura);
+                        } else {
+                            rndAnimation();
+                        }
+                    }
+                });
+            }
+        }, 100, 25000); // 初回起動の遅延(0sec)と周期(25sec)指定
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
+        myBgm.stop(0);
         timer.cancel();// タイマーを止める
+        timer2.cancel();// タイマーを止める
+        DataManager.getInstance(this).saveFRONTCHIKEN(nowBirdFrontRescorce);
+        DataManager.getInstance(this).saveSIDECHIKEN(nowBirdSideRescorce);
     }
 
     @Override
@@ -238,7 +404,6 @@ public class Bleeding extends Activity implements OnClickListener {
                 "いくら" + "\t" + String.valueOf(ikuraNum) + "コ", "キャンセル" };
 
         switch (v.getId()) {
-
         // エサボタン
         case R.id.tab_bait:
             if (DataManager.getInstance(this).loadEGG() == 0) {
@@ -282,6 +447,7 @@ public class Bleeding extends Activity implements OnClickListener {
                                                                     Bleeding.this)
                                                             .saveIKA(ikaNum - 1);
                                                     eatAnimation(R.drawable.ika);
+                                                    eating = 1;
                                                 }
                                                 break;
 
@@ -298,6 +464,7 @@ public class Bleeding extends Activity implements OnClickListener {
                                                                     Bleeding.this)
                                                             .saveEBI(ebiNum - 1);
                                                     eatAnimation(R.drawable.ebi);
+                                                    eating = 2;
                                                 }
                                                 break;
 
@@ -315,6 +482,7 @@ public class Bleeding extends Activity implements OnClickListener {
                                                             .saveMAGURO(
                                                                     maguroNum - 1);
                                                     eatAnimation(R.drawable.maguro);
+                                                    eating = 3;
                                                 }
                                                 break;
 
@@ -332,6 +500,7 @@ public class Bleeding extends Activity implements OnClickListener {
                                                             .saveSAMON(
                                                                     samonNum - 1);
                                                     eatAnimation(R.drawable.samon);
+                                                    eating = 4;
                                                 }
                                                 break;
 
@@ -349,6 +518,7 @@ public class Bleeding extends Activity implements OnClickListener {
                                                             .saveIKURA(
                                                                     ikuraNum - 1);
                                                     eatAnimation(R.drawable.ikura);
+                                                    eating = 5;
                                                 }
                                                 break;
 
@@ -364,16 +534,6 @@ public class Bleeding extends Activity implements OnClickListener {
 
                                             // 餌を所持していれば
                                             if (!wasNoFeed) {
-                                                DataManager.getInstance(
-                                                        Bleeding.this)
-                                                        .saveBLEEDING_POINT(
-                                                                BleedingPoint);
-                                                nowTime = newTime();
-                                                preTime = nowTime;
-                                                DataManager.getInstance(
-                                                        Bleeding.this)
-                                                        .saveTIME(nowTime);
-                                                // changeSatietyBar(0);
                                                 Bleeding.isHugry = false;
 
                                             } else {
@@ -393,44 +553,79 @@ public class Bleeding extends Activity implements OnClickListener {
         case R.id.tab_training:
             // トレーニングができるかの判定
             if (canTraning) {
-                // インテントのインスタンス生成
-                Intent intent0 = new Intent(Bleeding.this,
-                        RussianRoulette.class);
-                // 次画面のアクティビティ起動
-                startActivity(intent0);
+                String[] str_items = { "ロシアンルーレット", "おばけタッチ", "おばちゃんに見つかるな",
+                        "キャンセル" };
+                new AlertDialog.Builder(Bleeding.this)
+                        .setTitle("トレーニング")
+                        .setItems(str_items,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,
+                                            int which) {
+                                        // 選択したアイテムの番号(0～)がwhichに格納される
+                                        switch (which) {
+                                        case 0:
+                                            /**
+                                             * インテントのインスタンス生成 ロシアンルーレットへ移動
+                                             */
+                                            Intent intent0 = new Intent(
+                                                    Bleeding.this,
+                                                    RussianRoulette.class);
+                                            // 次画面のアクティビティ起動
+                                            startActivity(intent0);
+                                            break;
+                                        case 1:
+                                            /**
+                                             * インテントのインスタンス生成
+                                             * おばけタッチへ移動　テスト用にトップへ移動
+                                             */
+                                            Intent intent1 = new Intent(
+                                                    Bleeding.this,
+                                                    GhostCrash.class);
+                                            // 次画面のアクティビティ起動
+                                            startActivity(intent1);
+                                            break;
+
+                                        case 2:
+                                            /**
+                                             * インテントのインスタンス生成
+                                             * おばけタッチへ移動　テスト用にトップへ移動
+                                             */
+                                            Intent intent2 = new Intent(
+                                                    Bleeding.this,
+                                                    GarbagePick.class);
+                                            // 次画面のアクティビティ起動
+                                            startActivity(intent2);
+                                            break;
+                                        default:
+                                            Toast.makeText(Bleeding.this,
+                                                    "キャンセルしました",
+                                                    Toast.LENGTH_SHORT).show();
+                                            return;
+                                        }
+                                    }
+                                }).show();
+
             } else {
                 Toast.makeText(Bleeding.this, "まだトレーニングできません",
                         Toast.LENGTH_SHORT).show();
             }
-
             break;
 
         // ショップボタン
         case R.id.tab_shop:
-            // インテントのインスタンス生成
-            Intent intent1 = new Intent(Bleeding.this, Shop.class);
-            // 次画面のアクティビティ起動
-            startActivity(intent1);
+            Intent intent2 = new Intent(Bleeding.this, Shop.class);
+            startActivity(intent2);
             break;
 
         case R.id.tab_book:
-            // インテントのインスタンス生成
-            Intent intent2 = new Intent(Bleeding.this, BirdGuide.class);
-            // 次画面のアクティビティ起動
-            startActivity(intent2);
+            Intent intent3 = new Intent(Bleeding.this, BirdGuide.class);
+            startActivity(intent3);
             break;
 
         // トップボタン
         case R.id.tab_back:
-
-            // ////////////////////////////図鑑コンプ//////////////////////////////
-            DataManager.getInstance(this).saveCP(
-                    DataManager.getInstance(this).loadCP() + 10000);
-
-            // インテントのインスタンス生成
-            Intent intent3 = new Intent(Bleeding.this, ChikenActivity.class);
-            // 次画面のアクティビティ起動
-            startActivity(intent3);
+            Intent intent4 = new Intent(Bleeding.this, ChikenActivity.class);
+            startActivity(intent4);
             break;
         }
     }
@@ -446,20 +641,32 @@ public class Bleeding extends Activity implements OnClickListener {
 
     // 満腹度の変更
     public void changeSatietyBar(int elapseTime) {
-
-        if (elapseTime < 1) {
+        if (elapseTime <= hungryTime
+                || DataManager.getInstance(this).loadBLEEDING_POINT() >= secondEvo) {
             satietybarImgV.setImageResource(R.drawable.satietybar100);
             Bleeding.isHugry = false;
-        } else if (elapseTime >= 1 && elapseTime <= 3) {
+
+        } else if (elapseTime <= 200) {
             satietybarImgV.setImageResource(R.drawable.satietybar80);
             Bleeding.isHugry = true;
-        } else if (elapseTime >= 3 && elapseTime <= 4) {
+        } else if (elapseTime <= 300) {
+            satietybarImgV.setImageResource(R.drawable.satietybar60);
+            Bleeding.isHugry = true;
+        } else if (elapseTime <= 400) {
+            satietybarImgV.setImageResource(R.drawable.satietybar40);
+            Bleeding.isHugry = true;
+        } else if (elapseTime <= 500) {
+            satietybarImgV.setImageResource(R.drawable.satietybar20);
+            Bleeding.isHugry = true;
+        } else if (elapseTime < 1000) {
             satietybarImgV.setImageResource(R.drawable.satietybar0);
             Bleeding.isHugry = true;
-        } else if (elapseTime >= 20) {
-            Bleeding.isHugry = true;
+        } else if (elapseTime >= 1000) {
+            Bleeding.isHugry = false;
             satietybarImgV.setImageResource(R.drawable.satietybar0);
-            chikenImgV.setImageResource(R.drawable.chiken_rank8);
+            chikenImgV.setImageResource(R.drawable.none);
+            nowBirdFrontRescorce = R.drawable.none;
+            nowBirdSideRescorce = R.drawable.none;
             DataManager.getInstance(this).saveTOTALGUTS(0);
             DataManager.getInstance(this).saveBLEEDING_POINT(0);
             DataManager.getInstance(this).saveEGG(0);
@@ -471,166 +678,175 @@ public class Bleeding extends Activity implements OnClickListener {
     // 成長ポイントの判定 need test
     public void growthJudge(int elapseTime) {
 
-        // チキンも玉子もなかったら
+        // チキンも卵もなかったら
         if (DataManager.getInstance(this).loadEGG() == 0) {
             chikenImgV.setImageResource(R.drawable.none);
+
         } else {
 
             // 卵の状態なら
             if (DataManager.getInstance(this).loadBLEEDING_POINT() == 0) {
 
                 // 10分経ってなかったら
-                // elapseTime <= 9　だった
-                if (elapseTime < 1) {
-                    DataManager.getInstance(this).saveTRANING_JUDGE(false);
-                    if (DataManager.getInstance(this).loadEGG() == 1) {
-                        chikenImgV.setImageResource(R.drawable.egg_nomal);
-                    } else if (DataManager.getInstance(this).loadEGG() == 2) {
-                        chikenImgV.setImageResource(R.drawable.egg_green);
-                    } else if (DataManager.getInstance(this).loadEGG() == 3) {
-                        chikenImgV.setImageResource(R.drawable.egg_rain);
-                    } else if (DataManager.getInstance(this).loadEGG() == 4) {
-                        chikenImgV.setImageResource(R.drawable.egg_gold);
-                    }
+                // elapseTime <= 3　だった
+                if (elapseTime >= birthTime) {
 
-                    // elapseTime >= 10　だった
-                } else if (elapseTime >= 1) {
                     DataManager.getInstance(this).saveBLEEDING_POINT(10);
-                    chikenImgV.setImageResource(R.drawable.chiken_child);
-                }
-
-                // ひなが十分育ったら (400だった)
-            } else if (DataManager.getInstance(this).loadBLEEDING_POINT() >= 40) {
-
-                DataManager.getInstance(this).saveFORWARD_JUDGE(true);// 出荷可能にする
-
-                // 卵は全部で４種類ある
-                for (int i = 0; i < 4; i++) {
-
-                    // 卵の種類は何か
-                    if (DataManager.getInstance(this).loadEGG() == i + 1) {
-
-                        if (DataManager.getInstance(this).loadTOTALGUTS() <= 1499) {
-                            saveChikenType(1);
-                            chikenImgV.setImageResource(birdResorce[6 * i + 0]);// チキンの画像をセット
-                            updateDB(6 * i + 0);// データベースに保存
-                        } else if (DataManager.getInstance(this)
-                                .loadTOTALGUTS() < 3000) {
-                            saveChikenType(2);
-                            chikenImgV.setImageResource(birdResorce[6 * i + 1]);
-                            updateDB(6 * i + 1);// データベースに保存
-                        } else if (DataManager.getInstance(this)
-                                .loadTOTALGUTS() < 4500) {
-                            saveChikenType(3);
-                            chikenImgV.setImageResource(birdResorce[6 * i + 2]);
-                            updateDB(6 * i + 2);// データベースに保存
-                        } else if (DataManager.getInstance(this)
-                                .loadTOTALGUTS() < 6000) {
-                            saveChikenType(4);
-                            chikenImgV.setImageResource(birdResorce[6 * i + 3]);
-                            updateDB(6 * i + 3);// データベースに保存
-                        } else if (DataManager.getInstance(this)
-                                .loadTOTALGUTS() < 7500) {
-                            saveChikenType(5);
-                            chikenImgV.setImageResource(birdResorce[6 * i + 4]);
-                            updateDB(6 * i + 4);// データベースに保存
-                        } else if (DataManager.getInstance(this)
-                                .loadTOTALGUTS() >= 7500) {
-                            saveChikenType(6);
-                            chikenImgV.setImageResource(birdResorce[6 * i + 5]);
-                            updateDB(6 * i + 5);// データベースに保存
-                        }
+                    if (DataManager.getInstance(this).loadEGG() == 1) {
+                        nowBirdFrontRescorce = R.drawable.hina_front;
+                        nowBirdSideRescorce = R.drawable.hina_side;
+                    } else if (DataManager.getInstance(this).loadEGG() == 2) {
+                        nowBirdFrontRescorce = R.drawable.hina_front_uzu;
+                        nowBirdSideRescorce = R.drawable.hina_side_uzu;
+                    } else if (DataManager.getInstance(this).loadEGG() == 3) {
+                        nowBirdFrontRescorce = R.drawable.hina_front_rain;
+                        nowBirdSideRescorce = R.drawable.hina_side_rain;
+                    } else if (DataManager.getInstance(this).loadEGG() == 4) {
+                        nowBirdFrontRescorce = R.drawable.hina_front_gold;
+                        nowBirdSideRescorce = R.drawable.hina_side_gold;
                     }
                 }
 
-            } else {
-                chikenImgV.setImageResource(R.drawable.chiken_child);
+            } else if (DataManager.getInstance(this).loadBLEEDING_POINT() > firstEvo && 
+                    DataManager.getInstance(this).loadBLEEDING_POINT() < secondEvo) {
+                DataManager.getInstance(this).saveFORWARD_JUDGE(true);// 出荷可能にする
+                
+            } else if (DataManager.getInstance(this).loadBLEEDING_POINT() >= secondEvo) {
+                Toast.makeText(this, "最大まで成長しました　出荷しましょう", Toast.LENGTH_SHORT)
+                        .show();
             }
         }
     }
 
     // データベースに新しいチキンを登録する
-    public void updateDB(int id) {
+    public void updateDB(int id, int normalOrKing) {
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        // フラグを１にする
-        values.put(CHICKEN_TYPE, 1);
+        // フラグを1にする
+        values.put(CHICKEN_TYPE, normalOrKing);
         db.update(TABLE_NAME, values, "_ID =" + id, null);
-    }
-
-    // すべてのデータの初期化
-    public void allClear() {
-        DataManager.getInstance(this).saveCHIKEN(0);
-        DataManager.getInstance(this).saveBLEEDING_POINT(0);
-        DataManager.getInstance(this).saveCP(3000);
-        DataManager.getInstance(this).saveTOTALGUTS(0);
-        DataManager.getInstance(this).saveFORWARD_JUDGE(false);
-        DataManager.getInstance(this).saveEGG(0);
-        DataManager.getInstance(this).saveTIME(-1);
-        DataManager.getInstance(this).saveIKA(0);
-        DataManager.getInstance(this).saveEBI(0);
-        DataManager.getInstance(this).saveMAGURO(0);
-        DataManager.getInstance(this).saveSAMON(0);
-        DataManager.getInstance(this).saveIKURA(0);
-        DataManager.getInstance(this).saveGUTS(0);
-        DataManager.getInstance(this).saveGET_CP(0);
-    }
-
-    // public void datainsert(String dataname, int value) {
-    // データベースヘルパーの生成
-    // helper = new ChikenDBHelper(this);
-    // db = helper.getWritableDatabase();
-    // 最初の値を入れる
-    // ContentValues values = new ContentValues();
-    // values.put(dataname, value);
-    // db.insert("chikentb", null, values);
-    // db.close();
-    // }
-
-    // public void dataselect_cp(String dataname, char textname) {
-    // //データベースヘルパーの生成
-    // ChikenDBHelper helper = new ChikenDBHelper(this);
-    // SQLiteDatabase db = helper.getWritableDatabase();
-    // //テーブルの最後の値を表示
-    // Cursor c = db.query("chikentb", new String[] {"cp"}, null, null, null,
-    // null, null);
-    // c.moveToLast();
-    // textname.setText(c.getString(c.getColumnIndex("cp")));
-    // db.close();
-    // }
-
-    // チキンの種類保存
-    public void saveChikenType(int data) {
-        DataManager.getInstance(this).saveCHIKEN(data);
     }
 
     public void rndAnimation() {
         Random rnd = new Random();
-        int animNum = rnd.nextInt(3);
+        int animNum = rnd.nextInt(2);
 
         switch (animNum) {
-        case 1:
+        case 0:
+            chikenImgV.setImageResource(nowBirdFrontRescorce);
             Animation1();
-            System.out.println("非常に不満");
             break;
 
-        case 2:
+        case 1:
+            chikenImgV.setImageResource(nowBirdSideRescorce);
             Animation2();
-            System.out.println("2に不満");
             break;
 
-        case 3:
-            Animation3();
-            System.out.println("3に不満");
-            break;
+        // case 2:
+        // // chikenImgV.setImageResource(nowBirdImageResorce[1]);
+        // chikenImgV.setImageResource(a);
+        // Animation3();
+        // break;
 
         default:
             break;
         }
-        // rndAnimation();
     }
 
+    // チキンがエサを食べるアニメーション
+    public void chikenEatAnimation(int rid) {
+
+        /**
+         * チキンが食事をする時の画像 チキンによって食べる画像を変える
+         */
+        // ひなの画像　BLEEDING_POINTが150以下の場合
+        if (DataManager.getInstance(this).loadBLEEDING_POINT() < firstEvo) {
+            if (DataManager.getInstance(this).loadEGG() == 1) {
+                chikenImgV.setImageResource(R.drawable.hina_bait);
+            } else if (DataManager.getInstance(this).loadEGG() == 2) {
+                chikenImgV.setImageResource(R.drawable.hina_bait_uzu);
+            } else if (DataManager.getInstance(this).loadEGG() == 3) {
+                chikenImgV.setImageResource(R.drawable.hina_bait_rain);
+            } else if (DataManager.getInstance(this).loadEGG() == 4) {
+                chikenImgV.setImageResource(R.drawable.hina_bait_gold);
+            }
+            // チキンの画像
+        } else if (DataManager.getInstance(this).loadBLEEDING_POINT() >= firstEvo) {
+            for (int i = 0; i < 4; i++) {
+
+                // 卵の種類は何か
+                if (DataManager.getInstance(this).loadEGG() == i + 1) {
+
+                    if (DataManager.getInstance(this).loadTOTALGUTS() < firstChange) {
+                        chikenImgV.setImageResource(birdBaitResorce[6 * i + 0]);// チキンの画像をセット
+                    } else if (DataManager.getInstance(this).loadTOTALGUTS() < secontChange) {
+                        chikenImgV.setImageResource(birdBaitResorce[6 * i + 1]);
+                    } else if (DataManager.getInstance(this).loadTOTALGUTS() < 4500) {
+                        chikenImgV.setImageResource(birdBaitResorce[6 * i + 2]);
+                    } else if (DataManager.getInstance(this).loadTOTALGUTS() < 6000) {
+                        chikenImgV.setImageResource(birdBaitResorce[6 * i + 3]);
+                    } else if (DataManager.getInstance(this).loadTOTALGUTS() < 7500) {
+                        chikenImgV.setImageResource(birdBaitResorce[6 * i + 4]);
+                    } else if (DataManager.getInstance(this).loadTOTALGUTS() >= 7500) {
+                        chikenImgV.setImageResource(birdBaitResorce[6 * i + 5]);
+                    }
+                }
+            }
+
+        }
+
+        feedImgV.setImageResource(rid);
+
+        List<Animator> animatorList = new ArrayList<Animator>();
+
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(chikenImgV,
+                "alpha", 0f, 1f);
+        objectAnimator.setDuration(1000);
+        animatorList.add(objectAnimator);
+
+        PropertyValuesHolder holderX = PropertyValuesHolder.ofFloat(
+                "translationX", 0, 0);
+        PropertyValuesHolder holderY = PropertyValuesHolder.ofFloat(
+                "translationY", 0, 0);
+        // chikenに対してholderX, holderY
+        ObjectAnimator translationXYAnimator = ObjectAnimator
+                .ofPropertyValuesHolder(chikenImgV, holderX, holderY);
+
+        // 7秒かけて実行させます
+        translationXYAnimator.setDuration(7000);
+        animatorList.add(translationXYAnimator);
+        // alphaプロパティを0fから1fに変化させます
+        // ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(feedImgV,
+        // "alpha", 1f, 0f);
+        // // 3秒かけて実行させます
+        // objectAnimator.setDuration(4000);
+        // animatorList.add(objectAnimator);
+        final AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playSequentially(animatorList);
+        // アニメーションスタート
+        animatorSet.start();
+
+        // 遅延させてeatingをfalseにする
+        new Handler().postDelayed(delayFunc, 7000);
+    }
+
+    public void fadingAnimation(int rid) {
+
+        feedImgV.setImageResource(rid);
+        List<Animator> animatorList = new ArrayList<Animator>();
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(feedImgV,
+                "alpha", 1f, 0f);
+        // 3秒かけて実行させます
+        objectAnimator.setDuration(10000);
+        animatorList.add(objectAnimator);
+        final AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playSequentially(animatorList);
+        // アニメーションスタート
+        animatorSet.start();
+    }
+
+    // エサのアニメーション
     public void eatAnimation(int rid) {
         feedImgV.setImageResource(rid);
 
@@ -643,35 +859,198 @@ public class Bleeding extends Activity implements OnClickListener {
                 .ofPropertyValuesHolder(feedImgV, holderX, holderY);
         translationXYAnimator.setDuration(2000);
         animatorList.add(translationXYAnimator);
-        // alphaプロパティを0fから1fに変化させます
-        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(feedImgV,
-                "alpha", 1f, 0f);
-        // 3秒かけて実行させます
-        objectAnimator.setDuration(4000);
-        animatorList.add(objectAnimator);
+        // // alphaプロパティを0fから1fに変化させます
+        // ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(feedImgV,
+        // "alpha", 1f, 0f);
+        // // 3秒かけて実行させます
+        // objectAnimator.setDuration(4000);
+        // animatorList.add(objectAnimator);
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playSequentially(animatorList);
+        // アニメーションスタート
         animatorSet.start();
 
         // 遅延させてImageViewを消す
-        new Handler().postDelayed(delayFunc, 7000);
+        // new Handler().postDelayed(delayFunc, 7000);
     }
 
-    // 餌用のイメージビューを消すため
+    /**
+     * エサを食べた後の処理
+     */
     private final Runnable delayFunc = new Runnable() {
         @Override
         public void run() {
+
+            DataManager.getInstance(Bleeding.this).saveBLEEDING_POINT(
+                    BleedingPoint);
+            DataManager.getInstance(Bleeding.this).saveTIME(newTime());
+
+            // エサのイメージビューを消す
             feedImgV.setImageDrawable(null);
+            // 0にしてエサの種類をなしにする
+            eating = 0;
+
+            // /////////////////////////////////////////////////////////////////////////////////
+            // ひなの画像を元に戻す　BLEEDING_POINTが150以下の場合
+            if (BleedingPoint < firstEvo) {
+                if (DataManager.getInstance(Bleeding.this).loadEGG() == 1) {
+                    chikenImgV.setImageResource(R.drawable.hina_front);
+                } else if (DataManager.getInstance(Bleeding.this).loadEGG() == 2) {
+                    chikenImgV.setImageResource(R.drawable.hina_front_uzu);
+                } else if (DataManager.getInstance(Bleeding.this).loadEGG() == 3) {
+                    chikenImgV.setImageResource(R.drawable.hina_front_rain);
+                } else if (DataManager.getInstance(Bleeding.this).loadEGG() == 4) {
+                    chikenImgV.setImageResource(R.drawable.hina_front_gold);
+                }
+                // チキンの画像を元に戻す
+
+                // ///////////////////////////////////////////////////////////////////////
+                // 150
+            } else if (BleedingPoint >= firstEvo) {
+
+                for (int i = 0; i < 4; i++) {
+
+                    // 卵の種類は何か
+                    if (DataManager.getInstance(Bleeding.this).loadEGG() == i + 1) {
+
+                        if (DataManager.getInstance(Bleeding.this)
+                                .loadTOTALGUTS() < firstChange) {
+                            // ////////////////////////////////////////////////////////////////////////
+                            if (BleedingPoint >= secondEvo) {
+                                chikenImgV
+                                        .setImageResource(maxBirdResorce[6 * i + 0]);// チキンの画像をセット
+                                nowBirdFrontRescorce = maxBirdResorce[6 * i + 0];
+                                nowBirdSideRescorce = maxBirdResorce[6 * i + 0];
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(7);
+                                updateDB(6 * i + 0, 2);// データベースに保存
+                            } else {
+                                chikenImgV
+                                        .setImageResource(birdSideResorce[6 * i + 0]);// チキンの画像をセット
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(1);
+                                nowBirdFrontRescorce = birdFrontResorce[6 * i + 0];
+                                nowBirdSideRescorce = birdSideResorce[6 * i + 0];
+                                updateDB(6 * i + 0, 1);// データベースに保存
+                            }
+
+                        } else if (DataManager.getInstance(Bleeding.this)
+                                .loadTOTALGUTS() < secontChange) {
+                            if (BleedingPoint >= secondEvo) {
+                                chikenImgV
+                                        .setImageResource(maxBirdResorce[6 * i + 1]);// チキンの画像をセット
+                                nowBirdFrontRescorce = maxBirdResorce[6 * i + 1];
+                                nowBirdSideRescorce = maxBirdResorce[6 * i + 1];
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(8);
+                                updateDB(6 * i + 1, 2);// データベースに保存
+                            } else {
+                                chikenImgV
+                                        .setImageResource(birdSideResorce[6 * i + 1]);
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(2);
+                                nowBirdFrontRescorce = birdFrontResorce[6 * i + 1];
+                                nowBirdSideRescorce = birdSideResorce[6 * i + 1];
+                                updateDB(6 * i + 1, 1);// データベースに保存
+                            }
+
+                        } else if (DataManager.getInstance(Bleeding.this)
+                                .loadTOTALGUTS() < 4500) {
+                            if (BleedingPoint >= secondEvo) {
+                                chikenImgV
+                                        .setImageResource(maxBirdResorce[6 * i + 2]);// チキンの画像をセット
+                                nowBirdFrontRescorce = maxBirdResorce[6 * i + 2];
+                                nowBirdSideRescorce = maxBirdResorce[6 * i + 2];
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(9);
+                                updateDB(6 * i + 2, 2);// データベースに保存
+                            } else {
+                                chikenImgV
+                                        .setImageResource(birdSideResorce[6 * i + 2]);
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(3);
+                                nowBirdFrontRescorce = birdFrontResorce[6 * i + 2];
+                                nowBirdSideRescorce = birdSideResorce[6 * i + 2];
+                                updateDB(6 * i + 2, 1);// データベースに保存
+                            }
+
+                        } else if (DataManager.getInstance(Bleeding.this)
+                                .loadTOTALGUTS() < 6000) {
+                            if (BleedingPoint >= secondEvo) {
+                                chikenImgV
+                                        .setImageResource(maxBirdResorce[6 * i + 3]);// チキンの画像をセット
+                                nowBirdFrontRescorce = maxBirdResorce[6 * i + 3];
+                                nowBirdSideRescorce = maxBirdResorce[6 * i + 3];
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(10);
+                                updateDB(6 * i + 3, 2);// データベースに保存
+                            } else {
+                                chikenImgV
+                                        .setImageResource(birdSideResorce[6 * i + 3]);
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(4);
+                                nowBirdFrontRescorce = birdFrontResorce[6 * i + 3];
+                                nowBirdSideRescorce = birdSideResorce[6 * i + 3];
+                                updateDB(6 * i + 3, 1);// データベースに保存
+                            }
+
+                        } else if (DataManager.getInstance(Bleeding.this)
+                                .loadTOTALGUTS() < 7500) {
+                            if (BleedingPoint >= secondEvo) {
+                                chikenImgV
+                                        .setImageResource(maxBirdResorce[6 * i + 4]);// チキンの画像をセット
+                                nowBirdFrontRescorce = maxBirdResorce[6 * i + 4];
+                                nowBirdSideRescorce = maxBirdResorce[6 * i + 4];
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(11);
+                                updateDB(6 * i + 4, 2);// データベースに保存
+                            } else {
+                                chikenImgV
+                                        .setImageResource(birdSideResorce[6 * i + 4]);
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(5);
+                                nowBirdFrontRescorce = birdFrontResorce[6 * i + 4];
+                                nowBirdSideRescorce = birdSideResorce[6 * i + 4];
+                                updateDB(6 * i + 4, 1);// データベースに保存
+                            }
+
+                        } else if (DataManager.getInstance(Bleeding.this)
+                                .loadTOTALGUTS() >= 7500) {
+                            if (BleedingPoint >= secondEvo) {
+                                chikenImgV
+                                        .setImageResource(maxBirdResorce[6 * i + 5]);// チキンの画像をセット
+                                nowBirdFrontRescorce = maxBirdResorce[6 * i + 5];
+                                nowBirdSideRescorce = maxBirdResorce[6 * i + 5];
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(12);
+                                updateDB(6 * i + 5, 2);// データベースに保存
+                            } else {
+                                chikenImgV
+                                        .setImageResource(birdSideResorce[6 * i + 5]);
+                                DataManager.getInstance(Bleeding.this)
+                                        .saveCHIKEN(6);
+                                nowBirdFrontRescorce = birdFrontResorce[6 * i + 5];
+                                nowBirdSideRescorce = birdSideResorce[6 * i + 5];
+                                updateDB(6 * i + 5, 1);// データベースに保存
+                            }
+                        }
+
+                    }
+                }
+
+            }
         }
     };
 
     public void Animation1() {
 
-        // イメージビューの生成
-        chikenImgV = (ImageView) findViewById(R.id.chiken);
-
         // AnimatorSetに渡すAnimatorのリスト
         List<Animator> animatorList = new ArrayList<Animator>();
+
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(chikenImgV,
+                "alpha", 0f, 1f);
+        objectAnimator.setDuration(1000);
+        animatorList.add(objectAnimator);
 
         PropertyValuesHolder holderX = PropertyValuesHolder.ofFloat(
                 "translationX", 0, -20);
@@ -681,9 +1060,8 @@ public class Bleeding extends Activity implements OnClickListener {
         // chikenに対してholderX, holderY
         ObjectAnimator translationXYAnimator = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX, holderY);
-
-        // 2秒かけて実行させます
-        translationXYAnimator.setDuration(8000);
+        // 4秒かけて実行させます
+        translationXYAnimator.setDuration(4000);
 
         // リストに追加します
         animatorList.add(translationXYAnimator);
@@ -696,9 +1074,8 @@ public class Bleeding extends Activity implements OnClickListener {
         // chikenに対してholderX2, holderY2
         ObjectAnimator translationXYAnimator2 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX2, holderY2);
-
         // 2秒かけて実行させます
-        translationXYAnimator2.setDuration(10000);
+        translationXYAnimator2.setDuration(3000);
 
         // リストに追加します
         animatorList.add(translationXYAnimator2);
@@ -709,8 +1086,8 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", -130, 0);
         ObjectAnimator translationXYAnimator3 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX3, holderY3);
-        translationXYAnimator3.setStartDelay(4000);
-        translationXYAnimator3.setDuration(7000);
+        translationXYAnimator3.setStartDelay(1000);
+        translationXYAnimator3.setDuration(4000);
         animatorList.add(translationXYAnimator3);
 
         PropertyValuesHolder holderX4 = PropertyValuesHolder.ofFloat(
@@ -719,8 +1096,9 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", 0, 120);
         ObjectAnimator translationXYAnimator4 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX4, holderY4);
-        translationXYAnimator4.setStartDelay(4000);
-        translationXYAnimator4.setDuration(8000);
+        // エサを食べている間、アニメーションをストップ
+        translationXYAnimator4.setStartDelay(2000);
+        translationXYAnimator4.setDuration(4000);
         animatorList.add(translationXYAnimator4);
 
         PropertyValuesHolder holderX5 = PropertyValuesHolder.ofFloat(
@@ -729,8 +1107,8 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", 120, 0);
         ObjectAnimator translationXYAnimator5 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX5, holderY5);
-        translationXYAnimator5.setStartDelay(6000);
-        translationXYAnimator5.setDuration(6000);
+        // エサを食べている間、アニメーションをストップ
+        translationXYAnimator5.setDuration(3000);
         animatorList.add(translationXYAnimator5);
 
         final AnimatorSet animatorSet = new AnimatorSet();
@@ -743,16 +1121,20 @@ public class Bleeding extends Activity implements OnClickListener {
     }
 
     public void Animation2() {
-        chikenImgV = (ImageView) findViewById(R.id.chiken);
+        // chikenImgV = (ImageView) findViewById(R.id.chiken);
 
         List<Animator> animatorList = new ArrayList<Animator>();
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(chikenImgV,
+                "alpha", 0f, 1f);
+        objectAnimator.setDuration(1000);
+        animatorList.add(objectAnimator);
         PropertyValuesHolder holderX = PropertyValuesHolder.ofFloat(
                 "translationX", 0, -10);
         PropertyValuesHolder holderY = PropertyValuesHolder.ofFloat(
                 "translationY", 0, 120);
         ObjectAnimator translationXYAnimator = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX, holderY);
-        translationXYAnimator.setDuration(10000);
+        translationXYAnimator.setDuration(3000);
         animatorList.add(translationXYAnimator);
 
         PropertyValuesHolder holderX2 = PropertyValuesHolder.ofFloat(
@@ -761,8 +1143,8 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", 120, 30);
         ObjectAnimator translationXYAnimator2 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX2, holderY2);
-        translationXYAnimator2.setStartDelay(6000);
-        translationXYAnimator2.setDuration(8000);
+        translationXYAnimator2.setStartDelay(2000);
+        translationXYAnimator2.setDuration(3000);
         animatorList.add(translationXYAnimator2);
 
         PropertyValuesHolder holderX3 = PropertyValuesHolder.ofFloat(
@@ -771,7 +1153,7 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", 30, -80);
         ObjectAnimator translationXYAnimator3 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX3, holderY3);
-        translationXYAnimator3.setDuration(8000);
+        translationXYAnimator3.setDuration(4000);
         animatorList.add(translationXYAnimator3);
 
         PropertyValuesHolder holderX4 = PropertyValuesHolder.ofFloat(
@@ -780,8 +1162,7 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", -80, 40);
         ObjectAnimator translationXYAnimator4 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX4, holderY4);
-        translationXYAnimator4.setStartDelay(5000);
-        translationXYAnimator4.setDuration(9000);
+        translationXYAnimator4.setDuration(3000);
         animatorList.add(translationXYAnimator4);
 
         PropertyValuesHolder holderX5 = PropertyValuesHolder.ofFloat(
@@ -790,8 +1171,8 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", 40, 0);
         ObjectAnimator translationXYAnimator5 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX5, holderY5);
-        translationXYAnimator5.setStartDelay(10000);
-        translationXYAnimator5.setDuration(8000);
+        translationXYAnimator5.setStartDelay(2000);
+        translationXYAnimator5.setDuration(4000);
         animatorList.add(translationXYAnimator5);
 
         final AnimatorSet animatorSet = new AnimatorSet();
@@ -800,17 +1181,21 @@ public class Bleeding extends Activity implements OnClickListener {
     }
 
     public void Animation3() {
-        chikenImgV = (ImageView) findViewById(R.id.chiken);
+        // chikenImgV = (ImageView) findViewById(R.id.chiken);
 
         List<Animator> animatorList = new ArrayList<Animator>();
+        ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(chikenImgV,
+                "alpha", 0f, 1f);
+        objectAnimator.setDuration(1000);
+        animatorList.add(objectAnimator);
         PropertyValuesHolder holderX = PropertyValuesHolder.ofFloat(
                 "translationX", 0, 80);
         PropertyValuesHolder holderY = PropertyValuesHolder.ofFloat(
                 "translationY", 0, -40);
         ObjectAnimator translationXYAnimator = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX, holderY);
-        translationXYAnimator.setStartDelay(10000);
-        translationXYAnimator.setDuration(6000);
+        translationXYAnimator.setStartDelay(2000);
+        translationXYAnimator.setDuration(3000);
         animatorList.add(translationXYAnimator);
 
         PropertyValuesHolder holderX2 = PropertyValuesHolder.ofFloat(
@@ -819,8 +1204,8 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", -40, -80);
         ObjectAnimator translationXYAnimator2 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX2, holderY2);
-        translationXYAnimator2.setStartDelay(6000);
-        translationXYAnimator2.setDuration(10000);
+        translationXYAnimator2.setStartDelay(1000);
+        translationXYAnimator2.setDuration(4000);
         animatorList.add(translationXYAnimator2);
 
         PropertyValuesHolder holderX3 = PropertyValuesHolder.ofFloat(
@@ -829,7 +1214,7 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", -80, -100);
         ObjectAnimator translationXYAnimator3 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX3, holderY3);
-        translationXYAnimator3.setDuration(7000);
+        translationXYAnimator3.setDuration(3000);
         animatorList.add(translationXYAnimator3);
 
         PropertyValuesHolder holderX4 = PropertyValuesHolder.ofFloat(
@@ -838,8 +1223,8 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", -100, -20);
         ObjectAnimator translationXYAnimator4 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX4, holderY4);
-        translationXYAnimator4.setStartDelay(5000);
-        translationXYAnimator4.setDuration(11000);
+        translationXYAnimator4.setStartDelay(1000);
+        translationXYAnimator4.setDuration(3000);
         animatorList.add(translationXYAnimator4);
 
         PropertyValuesHolder holderX5 = PropertyValuesHolder.ofFloat(
@@ -848,7 +1233,7 @@ public class Bleeding extends Activity implements OnClickListener {
                 "translationY", -20, 0);
         ObjectAnimator translationXYAnimator5 = ObjectAnimator
                 .ofPropertyValuesHolder(chikenImgV, holderX5, holderY5);
-        translationXYAnimator5.setDuration(8000);
+        translationXYAnimator5.setDuration(4000);
         animatorList.add(translationXYAnimator5);
 
         final AnimatorSet animatorSet = new AnimatorSet();

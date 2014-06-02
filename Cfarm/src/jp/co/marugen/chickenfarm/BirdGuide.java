@@ -23,6 +23,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 public class BirdGuide extends Activity implements View.OnTouchListener,
@@ -36,6 +37,42 @@ public class BirdGuide extends Activity implements View.OnTouchListener,
     private float firstTouch;
     private boolean isFlip = false;
 
+    // 鳥の画像配列
+    private int[] maxBirdResorce = {
+
+        // egg1
+        R.drawable.niwatori_king,
+        R.drawable.hato_front_king,
+        R.drawable.suzume_front_king,
+        R.drawable.inko_front_king,
+        R.drawable.kamome_front_king,
+        R.drawable.mejiro_front_king,
+
+        // egg2
+        R.drawable.taka_front_king,
+        R.drawable.kyukantyo_front_king,
+        R.drawable.ukokkei_front_king,
+        R.drawable.oumu_front_king,
+        R.drawable.turu_front_king,
+        R.drawable.fukurou_front_king,
+
+        // egg3
+        R.drawable.perikan_front_king, 
+        R.drawable.kiji_front_king,
+        R.drawable.onioohashi_front_king, 
+        R.drawable.hagewasi_front_king,
+        R.drawable.furamingo_front_king,
+        R.drawable.pengin_front_king,
+
+        // egg4
+        R.drawable.datyou_front_king, 
+        R.drawable.iwatobi_pengin_front_king,
+        R.drawable.hikuidori_front_king, 
+        R.drawable.toki_front_king,
+        R.drawable.karaage_kun_king, 
+        R.drawable.twitter_front_king
+    };
+    
     // キャラクター画像
     private ImageView niwatori_img, hato_img, suzume_img, inko_img, kamome_img,
             meziro_img, taka_img, kyukantyo_img, ukokkei_img, omu_img,
@@ -69,9 +106,9 @@ public class BirdGuide extends Activity implements View.OnTouchListener,
 
         viewFlipper = (ViewFlipper) findViewById(R.id.flipper);
         findViewById(R.id.layout_first).setOnTouchListener(this);
-        findViewById(R.id.layout_fourth).setOnTouchListener(this);
-        findViewById(R.id.layout_third).setOnTouchListener(this);
         findViewById(R.id.layout_second).setOnTouchListener(this);
+        findViewById(R.id.layout_third).setOnTouchListener(this);
+        findViewById(R.id.layout_fourth).setOnTouchListener(this);
 
         // イメージビューの生成
         niwatori_img = (ImageView) findViewById(R.id.niwatori_img);
@@ -185,33 +222,6 @@ public class BirdGuide extends Activity implements View.OnTouchListener,
         returnBtnPage3.setOnClickListener(this);
         returnBtnPage4.setOnClickListener(this);
 
-        // ///////// SQLiteに初期値を入力する/////////////////
-        SharedPreferences preference = getSharedPreferences("Preference Name",
-                MODE_PRIVATE);
-        Editor editor = preference.edit();
-        String[] chickenNames = { "にわとり", "ハト", "スズメ", "インコ", "カモメ", "メジロ",
-                "タカ", "キュウカンチョウ", "ウコッケイ", "オウム", "ツル", "フクロウ", "ペリカン", "キジ",
-                "オニオオワシ", "ハゲワシ", "フラミンゴ", "ペンギン", "ダチョウ", "イワトビペンギン", "ヒクイドリ",
-                "トキ", "からあげクン", "ツイッター" };
-
-        if (preference.getBoolean("preIni", false) == false) {
-            // 初回起動時の処理
-            SQLiteDatabase db = helper.getWritableDatabase();
-            ContentValues values = new ContentValues();
-            for (int i = 0; i < 24; i++) {
-                values.put(_ID, i);
-                values.put(CHICKEN_NAME, chickenNames[i]);
-                values.put(CHICKEN_TYPE, 0);
-
-                db.insertOrThrow(TABLE_NAME, null, values);
-            }
-            // プリファレンスの書き変え
-            editor.putBoolean("preIni", true);
-            editor.commit();
-
-        } else {
-            // 2回目以降の処理
-        }
 
     }
 
@@ -223,7 +233,11 @@ public class BirdGuide extends Activity implements View.OnTouchListener,
             // 以下はデータベースの処理
             Cursor cursor = getData();
             hideChicken(cursor);
-            cursor.close();
+            cursor.close();            
+//            Cursor cursor1 = getData();
+//            cursor1.moveToFirst();
+//            ChikenMAXimg(cursor1);
+//            cursor1.close();
         } finally {
 
             // データベースを閉じる
@@ -253,11 +267,33 @@ public class BirdGuide extends Activity implements View.OnTouchListener,
             if (type == 0) {
                 imgsArray[counter].setVisibility(View.INVISIBLE);
                 textsArray[counter].setVisibility(View.INVISIBLE);
+            } else if (type == 2) {
+                imgsArray[counter].setImageResource(maxBirdResorce[counter]);
+            }
+            counter++;
+        }
+    }
+    
+    //チキンが最大まで成長した場合の処理
+    private void ChikenMAXimg(Cursor cursor) {
+        int counter = 0;
+        while (cursor.moveToNext()) {
+
+            // 各列ごとにデータを取得する
+            int type = cursor.getInt(2);
+
+            // タイプが０なら画像とテキストを隠す
+            if (type == 2) {
+            	Toast.makeText(BirdGuide.this, "チキン最大まで成長しました　出荷しましょう" + counter, Toast.LENGTH_SHORT)
+                .show();
+            	imgsArray[counter].setImageResource(maxBirdResorce[counter]);
+//            	imgsArray[chikenMAXcounter].setVisibility(View.INVISIBLE);
             }
             counter++;
         }
     }
 
+    
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         int x = (int) event.getRawX();

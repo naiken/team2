@@ -4,44 +4,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/how_to_play"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     tools:context=".MainActivity" >
-    
-      <ImageView
+
+    <ImageView
         android:id="@+id/view1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/how_to_title" />
-      
-      <View
-        android:layout_width="wrap_content"
-        android:layout_height="30dp" />
-    
 
-    <!-- <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="チキンファームの遊び方"
-        android:textAppearance="?android:attr/textAppearanceLarge" /> -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.2" />
 
     <!-- たまごを買おう -->
 
     <ImageButton
         android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/how_to_egg" />
-    
+
     <!-- 　えさをあげよう -->
 
     <ImageButton
         android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/how_to_buit" />
 
@@ -49,8 +48,10 @@
 
     <ImageButton
         android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/how_to_traning" />
 
@@ -58,8 +59,10 @@
 
     <ImageButton
         android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/how_to_forward" />
 
@@ -67,8 +70,10 @@
 
     <ImageButton
         android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/how_to_guide" />
 
@@ -76,8 +81,10 @@
 
     <ImageButton
         android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="fitCenter"
         android:background="@null"
         android:src="@drawable/how_to_back" />
 

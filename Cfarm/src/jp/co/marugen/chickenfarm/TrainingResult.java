@@ -1,5 +1,7 @@
 package jp.co.marugen.chickenfarm;
 
+
+import jp.co.marugen.chickenfarm.ghostcrash.MyRenderer;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -23,7 +25,7 @@ public class TrainingResult extends Activity {
 	private TextView total_guts_text;
 	private ImageView chiken_rank;
 	private ImageButton back_btn;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,13 +92,14 @@ public class TrainingResult extends Activity {
 		} else if (total_guts >= 7000) {
 			chiken_rank.setImageResource(R.drawable.chiken_rank8);
 		} else {
-		}
+		}	
 	}
-
+	
 	// クリックリスナークラス
 	private class ButtonClickListener implements OnClickListener {
 		// クリック時イベント
 		public void onClick(View v) {
+			
 			Intent intent = new Intent(TrainingResult.this, Bleeding.class);
 			startActivity(intent);
 		}

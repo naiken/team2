@@ -69,28 +69,29 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="5" />
+            android:layout_height="0dp"
+            android:layout_weight="2" />
         
         <ImageView
             android:id="@+id/chiken_rank"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
+            android:layout_height="0dp"
+            android:layout_weight="2"
             android:gravity="center" />
         
         <ImageButton
             android:id="@+id/backbutton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:scaleType="fitCenter"
             android:background="@null"
             android:src="@drawable/back_bleed" />
         
         <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="6" />
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
     </LinearLayout>
 

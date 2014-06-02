@@ -2,14 +2,21 @@ package jp.co.marugen.chickenfarm;
 
 import java.util.Random;
 
+import jp.co.marugen.chickenfarm.ghostcrash.MyGgm;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
@@ -29,6 +36,9 @@ public class RussianRoulette extends Activity implements OnClickListener {
     private ImageButton samon;
     private ImageButton ikura;
     private ImageButton ChikenButton;
+    
+    private AlertDialog alert;
+    private MyGgm myBgm;
 
     private boolean wasHit;// 当たったかどうかの判定
 
@@ -64,14 +74,23 @@ public class RussianRoulette extends Activity implements OnClickListener {
         // イメージボタン生成
         ChikenButton = (ImageButton) findViewById(R.id.chiken_button);
         ChikenButton.setOnClickListener(this);
+        
+        myBgm = new MyGgm(this);
     }
 
     public void onResume() {
         super.onResume();
-
+        myBgm.start(3);
         successCount = 0;
         Random rnd = new Random();
         failure_num = rnd.nextInt(6) + 1;
+        
+        showTutorial();
+    }
+    
+    public void onPause() {
+        super.onPause();
+        myBgm.stop(3);
     }
 
     // OnClickListenerのイベント
@@ -161,7 +180,7 @@ public class RussianRoulette extends Activity implements OnClickListener {
 
         // 当たったら
         if (wasHit) {
-            dad.setImageResource(R.drawable.sucsess_img);
+            dad.setImageResource(R.drawable.success);
             successCount++;
 
             // 全正解なら
@@ -173,7 +192,7 @@ public class RussianRoulette extends Activity implements OnClickListener {
 
             // 外れた
         } else {
-            dad.setImageResource(R.drawable.failure_img);
+            dad.setImageResource(R.drawable.failure);
             successCount = 0;
             saveScore();
             doClickablefalse();
@@ -183,11 +202,8 @@ public class RussianRoulette extends Activity implements OnClickListener {
 
     public void saveScore() {
 
-        if (successCount == 1) {
-            
-            //////////////////////図鑑コンプ作業用////////////////
-            guts_point = 1800;
-//            guts_point = 10; 
+        if (successCount == 1) {          
+            guts_point = 10; 
             cp_point = 5;
         } else if (successCount == 2) {
             guts_point = 30;
@@ -244,4 +260,49 @@ public class RussianRoulette extends Activity implements OnClickListener {
         }
         return super.dispatchKeyEvent(event);
     }
+    // //////////////////////チュートリアルの表示//////////////////////
+    protected void showTutorial() {
+
+        SharedPreferences pref = getSharedPreferences("user_data",
+                Context.MODE_PRIVATE);
+        final Editor editor = pref.edit();
+
+        if (pref.getBoolean("russian_tutorial", false) == false) {
+
+            // duringTutorial = true;
+
+            // チェック表示用のアラートダイアログ
+            final CharSequence[] chkItems = { "毎回表示する" };
+            final boolean[] chkSts = { true, false, false };
+            AlertDialog.Builder checkDlg = new AlertDialog.Builder(this);
+            // 画像を入れるため
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View view = factory.inflate(R.layout.russian_tutorial,
+                    null);
+            checkDlg.setView(view);
+            checkDlg.setTitle("遊び方");
+            checkDlg.setMultiChoiceItems(chkItems, chkSts,
+                    new DialogInterface.OnMultiChoiceClickListener() {
+                        public void onClick(DialogInterface dialog, int which,
+                                boolean flag) {
+                            // 項目選択時の処理
+                            // i は、選択されたアイテムのインデックス
+                            // flag は、チェック状態
+                            // プリファレンスにtrueを入れる
+                            if (flag == false)
+                                // "user_name" というキーで名前を登録
+                                editor.putBoolean("russian_tutorial", true);
+                            // 書き込みの確定（実際にファイルに書き込む）
+                            editor.commit();
+                        }
+                    });
+
+            // 表示
+            alert = checkDlg.create();
+            alert.show();
+        } else {
+            // 何もしない
+        }
+    }
 }
+
